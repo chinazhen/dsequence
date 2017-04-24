@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/dsequence.iml" filepath="$PROJECT_DIR$/dsequence.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dsequence-client/dsequence-client.iml" filepath="$PROJECT_DIR$/dsequence-client/dsequence-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dsequence-commons/dsequence-commons.iml" filepath="$PROJECT_DIR$/dsequence-commons/dsequence-commons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dsequence-server/dsequence-server.iml" filepath="$PROJECT_DIR$/dsequence-server/dsequence-server.iml" />
+    </modules>
+  </component>
+</project>

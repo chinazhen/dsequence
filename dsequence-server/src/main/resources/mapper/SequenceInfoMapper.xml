@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.dsequence.server.dal.SequenceInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.github.dsequence.server.dal.SequenceInfoDO">
+        <result column="ID"             property="id"           jdbcType="DECIMAL"/>
+        <result column="APP_NAME"       property="appName"      jdbcType="VARCHAR"/>
+        <result column="SEQ_NAME"       property="seqName"      jdbcType="VARCHAR" />
+        <result column="LAST_SEQ"       property="lastSeq"      jdbcType="DECIMAL" />
+        <result column="NEXT_SEQ"       property="nextSeq"      jdbcType="DECIMAL" />
+        <result column="MAX_SEQ"        property="maxSeq"       jdbcType="DECIMAL" />
+        <result column="CREATED_AT"     property="createdAt"    jdbcType="TIMESTAMP" />
+        <result column="CREATED_BY"     property="createdBy"    jdbcType="VARCHAR"/>
+        <result column="UPDATED_AT"     property="updatedAt"    jdbcType="TIMESTAMP" />
+        <result column="UPDATED_BY"     property="updatedBy"    jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		ID,
+        APP_NAME,
+        SEQ_NAME,
+        LAST_SEQ,
+        SEQ_NAME,
+        NEXT_SEQ,
+        MAX_SEQ,
+        CREATED_AT,
+        CREATED_BY,
+        UPDATED_AT,
+        UPDATED_BY
+	</sql>
+
+    <!-- 新增序列信息 -->
+    <insert id="insert" parameterType="com.github.dsequence.server.dal.SequenceInfoDO" useGeneratedKeys="true" keyProperty="id">
+        /* 新增序列信息 */
+        INSERT INTO
+          T_SEQUENCE_INFO (
+            APP_NAME,
+            SEQ_NAME,
+            LAST_SEQ,
+            NEXT_SEQ,
+            MAX_SEQ,
+            CREATED_AT,
+            CREATED_BY,
+            UPDATED_AT,
+            UPDATED_BY
+        ) VALUES (
+            #{appName,jdbcType=VARCHAR},
+            #{seqName,jdbcType=VARCHAR},
+            #{lastSeq,jdbcType=DECIMAL},
+            #{nextSeq,jdbcType=DECIMAL},
+            #{maxSeq,jdbcType=DECIMAL},
+            NOW(),
+            #{createdBy,jdbcType=VARCHAR},
+            NOW(),
+            #{updatedBy,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <!-- 判断序列是否已存在 -->
+    <select id="isExisted" resultType="java.lang.Integer" parameterType="java.lang.String" >
+        /* 判断序列是否已存在 */
+        SELECT
+            COUNT(0)
+        FROM
+            T_SEQUENCE_INFO
+        WHERE
+            APP_NAME = #{appName,jdbcType=VARCHAR}
+        AND
+            SEQ_NAME = #{seqName,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 根据应用名称及序列名称查询序列ID -->
+    <select id="selectIdForUpdate" resultType="java.lang.Long" parameterType="java.lang.String" >
+        /* 根据应用名称及序列名称查询序列信息 */
+        SELECT
+            ID
+        FROM
+            T_SEQUENCE_INFO
+        WHERE
+            APP_NAME = #{appName,jdbcType=VARCHAR}
+        AND
+            SEQ_NAME = #{seqName,jdbcType=VARCHAR}
+        FOR UPDATE
+    </select>
+
+    <!-- 根据应用名称及序列名称查询序列ID -->
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        /* 根据应用名称及序列名称查询序列信息 */
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM
+            T_SEQUENCE_INFO
+        WHERE
+            ID = #{id,jdbcType=DECIMAL}
+    </select>
+
+    <!-- 根据应用名称及序列名称查询序列信息 -->
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        /* 根据应用名称及序列名称查询序列信息 */
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM
+            T_SEQUENCE_INFO
+        WHERE
+            APP_NAME = #{appName,jdbcType=VARCHAR}
+        AND
+            SEQ_NAME = #{seqName,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 根据应用名称或序列名称查询序列信息 -->
+    <select id="selectList" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        /* 根据应用名称或序列名称查询序列信息 */
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM
+            T_SEQUENCE_INFO
+        WHERE
+            APP_NAME = #{appName,jdbcType=VARCHAR}
+        <if test="seqName != null and seqName != ''" >
+            AND SEQ_NAME = #{seqName,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <!-- 查询所有序列信息 -->
+    <select id="selectAll" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        /* 查询所有序列信息 */
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM
+            T_SEQUENCE_INFO
+    </select>
+
+    <!-- 更新序列 -->
+    <update id="update">
+        /* 更新序列 */
+        UPDATE
+            T_SEQUENCE_INFO
+        SET
+            LAST_SEQ = NEXT_SEQ,
+            NEXT_SEQ = NEXT_SEQ + #{limit,jdbcType=DECIMAL},
+            UPDATED_AT = NOW()
+        WHERE
+            ID = #{id,jdbcType=DECIMAL}
+    </update>
+
+    <!-- 更新序列 -->
+    <update id="reset" parameterType="com.github.dsequence.server.dal.SequenceInfoDO">
+        /* 更新序列 */
+        UPDATE
+            T_SEQUENCE_INFO
+        SET
+            LAST_SEQ = #{lastSeq,jdbcType=DECIMAL},
+            NEXT_SEQ = #{nextSeq,jdbcType=DECIMAL},
+            UPDATED_AT = NOW()
+        WHERE
+            ID = #{id,jdbcType=DECIMAL}
+    </update>
+
+</mapper>

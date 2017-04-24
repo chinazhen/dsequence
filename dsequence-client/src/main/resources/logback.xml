@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+　　　　　　　<pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
+　　　　　</encoder>
+　　</appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+　　　　　<file>/data/log/sequence.log</file>
+　　　　　<append>true</append>
+　　　　　<encoder>
+　　　　　　　<pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+　　　　　</encoder>
+　　</appender>
+
+    <!-- 外部jar包 日志级别设置 -->
+    <logger level="ERROR" name="com.ibatis" />
+    <logger level="ERROR" name="com.mchange" />
+    <logger level="ERROR" name="com.mangofactory"/>
+    <logger level="ERROR" name="java.sql"/>
+    <logger level="ERROR" name="ch.qos.logback"/>
+    <logger level="ERROR" name="com.alibaba"/>
+    <logger level="ERROR" name="org"/>
+    <logger level="ERROR" name="jndi"/>
+    <logger level="ERROR" name="org.jdbcdslog"/>
+
+    <logger level="INFO" name="com.github.dsequence" additivity="true">
+        <appender-ref ref="FILE" />
+    </logger>
+
+    <root level="INFO">
+    　　<appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>
