@@ -84,7 +84,7 @@ PS : 项目jdk 版本为1.8，项目使用lombok插件，idea源码编译时请 
 
 * Java code
 
-		package com.baofu.account.manager.sequence;
+		package ...;
 		
 		import ...
 		
